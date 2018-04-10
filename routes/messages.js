@@ -26,7 +26,7 @@ MessageList = function() {
     };
 
     getAllMessages = function() {
-        return messages;
+        return { "messages": messages };
     }
 
     return {

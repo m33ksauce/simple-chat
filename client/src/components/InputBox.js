@@ -1,44 +1,67 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 class InputBox extends Component {
     constructor(props) {
         super(props);
-        this.state = {value: ''};
-    
-        this.handleChange = this.handleChange.bind(this);
+        this.state = { user: '', messageBody: '' };
+        this.api = props.api;
+
+        this.handleMessageBodyChange = this.handleMessageBodyChange.bind(this);
+        this.handleUserChange = this.handleUserChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
-    handleChange(event) {
-        this.setState({value: event.target.value});
+
+    handleMessageBodyChange(event) {
+        this.setState({ user: this.state.user,
+                        messageBody: event.target.value });
     }
-    
+
+    handleUserChange(event) {
+        this.setState({ user: event.target.value,
+                        messageBody: this.state.messageBody });
+    }
+
     handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.value);
+        this.sendMessage(this.state.user, this.state.messageBody)
+        this.setState({ user: this.state.user,
+                        messageBody: "" });
         event.preventDefault();
     }
-    
+
     render() {
-        return(
+        return (
             <form onSubmit={this.handleSubmit}>
                 <label>
                     Name:
-                    <input type="text" name="user" />
+                    <input type="text" name="user" value={this.state.user} 
+                        onChange={this.handleUserChange}/>
                 </label>
                 <br />
                 <label>
                     Message:
-                    <input type="text" name="message" />
+                    <input type="text" name="message" value={this.state.messageBody}
+                        onChange={this.handleMessageBodyChange}/>
                 </label>
                 <input type="submit" value="Send!" />
             </form>
         );
     }
 
-    sendMessage() {
-        //
+    sendMessage(user, messageBody) {
+        console.log(user, messageBody)
+        fetch(this.api + "/newMessage", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                msg: {
+                    user: user,
+                    messageBody: messageBody
+                }
+            })
+        });
     }
 }
 

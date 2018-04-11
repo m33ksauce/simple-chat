@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
 
 Message = function(user, messageBody) {
     this.user = user;
@@ -8,6 +9,7 @@ Message = function(user, messageBody) {
 
 MessageList = function() {
     var messages = new Array();
+    var fileStore = 'msgs.txt';
 
     addMessage = function(msg) {
         messages.push(msg);
@@ -27,7 +29,13 @@ MessageList = function() {
 
     getAllMessages = function() {
         return { "messages": messages };
-    }
+    };
+
+    storeMessage = function(msg) {
+        //fs.writeFile()
+    };
+
+    retrieveMessages = function() {};
 
     return {
         addMessage,
